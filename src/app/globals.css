@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+  background-color: #0f172a;
+  color: #e5e7eb;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 深空网格背景 + 暗金氛围光 */
+body {
+  background-image:
+    radial-gradient(1200px 600px at 50% -10%, rgba(198, 161, 91, 0.08), transparent 60%),
+    linear-gradient(rgba(198, 161, 91, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(198, 161, 91, 0.04) 1px, transparent 1px);
+  background-size: auto, 44px 44px, 44px 44px;
+  background-attachment: fixed;
+}
+
+/* 移动端更紧凑的滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(198, 161, 91, 0.3);
+  border-radius: 3px;
+}
+
+@layer components {
+  .glass {
+    @apply bg-ink-800/60 backdrop-blur-md border border-white/5;
+  }
+  .text-gold-gradient {
+    background: linear-gradient(90deg, #e3c88a, #c6a15b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}

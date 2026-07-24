@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(uid) { return isSignedIn() && request.auth.uid == uid; }
+
+    // 排盘：本人可建可读；免费层数据
+    match /charts/{chartId} {
+      allow read: if isOwner(resource.data.ownerUid);
+      allow create: if isSignedIn() && request.resource.data.ownerUid == request.auth.uid;
+      allow update, delete: if false; // 排盘不可变
+    }
+
+    // 支付流水：本人只读；写入只允许 Cloud Functions（Admin SDK 绕过规则）
+    match /payments/{paymentId} {
+      allow read: if isOwner(resource.data.uid);
+      allow write: if false;
+    }
+
+    // AI 报告：本人只读；写入只允许 Cloud Functions
+    match /reports/{chartId} {
+      allow read: if isOwner(resource.data.uid);
+      allow write: if false;
+    }
+  }
+}

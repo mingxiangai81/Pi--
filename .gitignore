@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+functions/node_modules/
+.pnp
+.pnp.js
+
+# next
+.next/
+out/
+build/
+next-env.d.ts
+
+# firebase
+functions/lib/
+.firebase/
+firebase-debug.log
+*-debug.log
+
+# env
+.env
+.env*.local
+.env.local
+
+# misc
+.DS_Store
+*.pem
+coverage/
+.vercel
+.turbo
+*.tsbuildinfo
