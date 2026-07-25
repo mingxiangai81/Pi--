@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 import { BaziChart } from '@/components/BaziChart';
 import { WuXingRadar } from '@/components/WuXingRadar';
@@ -10,14 +10,19 @@ import { AiReport } from '@/components/AiReport';
 import { getChart, getReport, type AiReportContent } from '@/lib/firebase/report';
 import type { BaziChart as BaziChartType } from '@/lib/bazi/types';
 
-export default function ResultPage() {
-  const { id } = useParams<{ id: string }>();
+function ResultView() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') ?? '';
   const router = useRouter();
   const [chart, setChart] = useState<BaziChartType | null>(null);
   const [report, setReport] = useState<AiReportContent | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
     (async () => {
       try {
         // 本地降级：sessionStorage
@@ -76,5 +81,15 @@ export default function ResultPage() {
         <Paywall chartId={id} onUnlocked={setReport} />
       )}
     </main>
+  );
+}
+
+export default function ResultPage() {
+  return (
+    <Suspense
+      fallback={<main className="px-4 py-16 text-center text-sm text-gray-500">正在载入命盘…</main>}
+    >
+      <ResultView />
+    </Suspense>
   );
 }

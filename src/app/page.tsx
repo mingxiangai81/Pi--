@@ -29,7 +29,7 @@ export default function HomePage() {
         chartId = `local-${Date.now()}`;
         sessionStorage.setItem(chartId, JSON.stringify(chart));
       }
-      router.push(`/result/${chartId}`);
+      router.push(`/result?id=${chartId}`);
     } catch (e) {
       setError((e as Error).message);
     } finally {
